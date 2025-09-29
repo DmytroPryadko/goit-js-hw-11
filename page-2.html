@@ -2,27 +2,28 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/goit-js-hw-11/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vanilla App Template</title>
+    <link rel="stylesheet" href="./css/style.css" />
+    <title>goit-js-hw-11</title>
     <script type="module" crossorigin src="/goit-js-hw-11/assets/vendor-5ObWk2rO.js"></script>
     <script type="module" crossorigin src="/goit-js-hw-11/assets/main-C7gBpCMk.js"></script>
     <link rel="stylesheet" crossorigin href="/goit-js-hw-11/assets/vendor-DumFYO8Z.css">
-    <link rel="stylesheet" crossorigin href="/goit-js-hw-11/assets/styles-D5Rs8jEz.css">
   </head>
   <body>
-    <form class="form-search">
-      <input
-        type="text"
-        class="input-search"
-        name="search"
-        placeholder="Search images..."
-      />
-      <button type="submit" class="btn-sbt">Search</button>
-    </form>
-
-    <span class="loader"></span>
-    <ul class="card-container"></ul>
-
+    <header class="header">
+      <div class="container">
+        <form class="form-search js-search-form">
+          <input type="text" class="search-input" name="searchtext" />
+          <button type="submit" class="search-button">Search</button>
+        </form>
+      </div>
+    </header>
+    <main>
+      <div class="container">
+        <span class="js-loader"></span>
+        <ul class="gallery"></ul>
+      </div>
+    </main>
   </body>
 </html>
