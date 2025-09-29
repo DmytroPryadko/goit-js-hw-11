@@ -9,7 +9,8 @@
   </head>
   <body>
     <div class="container">
-      <form class="form-inline">
+      <!-- змінив class="form-inline" на class="form" -->
+      <form class="form">
         <div class="form-group">
           <input
             type="text"
@@ -22,9 +23,13 @@
 
         <button type="submit" class="btn">Search</button>
       </form>
+
       <span class="loader"></span>
-      <ul class="js-list images"></ul>
+
+      <!-- змінив ul class="js-list images" на class="gallery" -->
+      <ul class="gallery"></ul>
     </div>
+
     <script type="module" src="./main.js"></script>
   </body>
 </html>
