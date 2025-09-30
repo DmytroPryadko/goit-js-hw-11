@@ -1,20 +1,28 @@
-import{S as f,i as a}from"./assets/vendor-5ObWk2rO.js";(function(){const s=document.createElement("link").relList;if(s&&s.supports&&s.supports("modulepreload"))return;for(const e of document.querySelectorAll('link[rel="modulepreload"]'))r(e);new MutationObserver(e=>{for(const t of e)if(t.type==="childList")for(const n of t.addedNodes)n.tagName==="LINK"&&n.rel==="modulepreload"&&r(n)}).observe(document,{childList:!0,subtree:!0});function i(e){const t={};return e.integrity&&(t.integrity=e.integrity),e.referrerPolicy&&(t.referrerPolicy=e.referrerPolicy),e.crossOrigin==="use-credentials"?t.credentials="include":e.crossOrigin==="anonymous"?t.credentials="omit":t.credentials="same-origin",t}function r(e){if(e.ep)return;e.ep=!0;const t=i(e);fetch(e.href,t)}})();function d(o){return o.map(({webformatURL:s,largeImageURL:i,tags:r,likes:e,views:t,comments:n,downloads:p})=>`
-    <li class="gallery-item">
-      <div class="gallery">
-       <a class="gallery-link" href="${i}">
-       <img class="gallery-image"
-         src="${s}"
-         alt="${r}"
-        />
-       </a>
-       
-      <ul class="card-description">
-        <li class="description">Likes <span class="accent">${e} </span></li>
-        <li class="description">Views <span class="accent">${t} </span></li>
-        <li class="description">Comments <span class="accent">${n} </span></li>
-        <li class="description">Downloads <span class="accent">${p} </span></li>
-      </ul>
-      </div>
-    </li>
-    `).join("")}function m(o=""){const s="https://pixabay.com/api/",i="44796244-d6f861acc8986ccf49175a119",r=new URLSearchParams({key:i,q:o,image_typ:"photo",orientation:"horizontal",safesearch:!0,per_page:20});return fetch(`${s}?${r}`).then(e=>{if(!e.ok)throw new Error(e.statusText);return e.json()})}const c=document.querySelector(".form-inline"),l=document.querySelector(".js-list"),g=document.querySelector(".loader");c.addEventListener("submit",y);function u(){g.classList.toggle("visible")}const h=new f(".images a",{captionsData:"alt",captionDelay:250});function y(o){o.preventDefault(),l.innerHTML="";const{query:s}=o.currentTarget.elements;let i=s.value.trim();if(i===""){a.error({title:"Error",message:"The field cannot be empty!!!",position:"topRight"}),c.reset();return}u(),m(i).then(r=>{r.hits.length===0?a.warning({title:"",message:"Sorry, there are no images matching your search query. Please try again!",position:"topRight"}):(l.insertAdjacentHTML("beforeend",d(r.hits)),h.refresh())}).catch(r=>{a.error({title:"Error",message:"An error occurred while fetching data. Please try again later.",position:"topRight"})}).finally(()=>u()),c.reset()}
+import{i,S as f}from"./assets/vendor-5ObWk2rO.js";(function(){const e=document.createElement("link").relList;if(e&&e.supports&&e.supports("modulepreload"))return;for(const t of document.querySelectorAll('link[rel="modulepreload"]'))n(t);new MutationObserver(t=>{for(const a of t)if(a.type==="childList")for(const l of a.addedNodes)l.tagName==="LINK"&&l.rel==="modulepreload"&&n(l)}).observe(document,{childList:!0,subtree:!0});function o(t){const a={};return t.integrity&&(a.integrity=t.integrity),t.referrerPolicy&&(a.referrerPolicy=t.referrerPolicy),t.crossOrigin==="use-credentials"?a.credentials="include":t.crossOrigin==="anonymous"?a.credentials="omit":a.credentials="same-origin",a}function n(t){if(t.ep)return;t.ep=!0;const a=o(t);fetch(t.href,a)}})();i.settings({timeout:2500,resetOnHover:!0,transitionIn:"flipInX",transitionOut:"flipOutX",position:"topRight",titleSize:25,messageSize:25,backgroundColor:"rgba(255, 182, 66, 0.8)"});const s={searchForm:document.querySelector(".js-search-form"),gallery:document.querySelector(".gallery"),loader:document.querySelector(".js-loader")};function h(r){return r.map(e=>`<li class="card">
+            <a href="${e.largeImageURL}" class="big gallery-link">
+              <img
+                src="${e.previewURL}"
+                alt="${e.tags}"
+                title="${e.tags}"
+                class="card-img"
+            /></a>
+            <ul class="card-title">
+              <li class="card-text-blok">
+                <h2 class="card-title-text">Likes</h2>
+                <p class="card-text-value">${e.likes}</p>
+              </li>
+              <li class="card-text-blok">
+                <h2 class="card-title-text">Views</h2>
+                <p class="card-text-value">${e.views}</p>
+              </li>
+              <li class="card-text-blok">
+                <h2 class="card-title-text">Comments</h2>
+                <p class="card-text-value">${e.comments}</p>
+              </li>
+              <li class="card-text-blok">
+                <h2 class="card-title-text">Downloads</h2>
+                <p class="card-text-value">${e.downloads}</p>
+              </li>
+            </ul>
+          </li>`).join("")}function c(r){switch(r){case"outdata":i.warning({title:"Error",message:"Введіть данні для пошуку!"});break;case"nodata":i.warning({title:"Error",message:"Sorry, there are no images matching your search query. Please try again!"});break;default:i.error({title:"Error",message:"Щось пішло не так. Ми працюемо над вирішенням питання!"});break}}const d={key:"44443472-3b41bcc651e7d0b56b1888f38",q:"",image_type:"photo",orientation:"horizontal",safesearch:!0,per_page:12};function m(r){return d.q=r,`https://pixabay.com/api/?${new URLSearchParams(d)}`}function g(r){return fetch(r).then(e=>{if(!e.ok)throw new Error(e.status);return e.json()})}s.searchForm.addEventListener("submit",p);function p(r){r.preventDefault();const e=r.target.searchtext.value;if(!e){c("outdata");return}s.gallery.innerHTML="",s.loader.classList.add("loader"),g(m(e)).then(o=>{if(s.loader.classList.remove("loader"),o.totalHits===0){c("nodata");return}s.gallery.insertAdjacentHTML("beforeend",h(o.hits)),u.refresh()}).catch(o=>{s.loader.classList.remove("loader"),c(o)}).finally(s.searchForm.reset())}const u=new f(".gallery a",{captionDelay:250,overlayOpacity:.8,scrollZoom:!1});u.on("show.simplelightbox",function(){});
 //# sourceMappingURL=index.js.map
