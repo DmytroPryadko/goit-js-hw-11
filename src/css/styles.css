@@ -1,131 +1,135 @@
+@import url('../../node_modules/modern-normalize/modern-normalize.css');
+@import url('./null.css');
+@import url('./base.css');
 
-/**
-  |============================
-  | include css partials with
-  | default @import url()
-  |============================
-*/
-@import url('./reset.css');
+input:focus,
+input:active {
+  border-color: #000;
+}
 
-.container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding-top: 36px;
-}
-.form-inline {
-  display: flex;
-  flex-direction: row;
-  gap: 4px;
-  justify-content: center;
-  margin-top: 16px;
-  margin-bottom: 30px;
-}
-.form-control {
-  background-color: #fff;
-  font-family: "Montserrat", sans-serif;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 1.5;
-  letter-spacing: 0.04em;
-  color: #808080;
-  border: 1px solid #808080;
-  border-radius: 4px;
-  width: 272px;
-  height: 40px;
-  padding: 0 0 0 16px;
-}
-.form-control:hover {
-  border: 1px solid #000;
-  background-color: #fff;
-}
-.btn {
-  border-radius: 8px;
+button {
   padding: 8px 16px;
-  width: 91px;
-  height: 40px;
-  color: #FFFFFF;
-  background: #4e75ff;
+  border-radius: 8px;
   border: none;
+  background-color: #4e75ff;
+  color: #fff;
+  font-weight: 500;
+  transition: background-color 250ms ease-in-out;
 }
-.btn:hover {
-  background: #6c8cff;
+
+button:hover {
+  background-color: #6c8cff;
 }
-.images {
+
+.gallery {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  align-content: center;
   row-gap: 24px;
   column-gap: 24px;
+  padding: 24px 0;
   background-color: #fff;
+  justify-content: center;
 }
-.gallery-item {
-  border: 1px solid #808080;
+
+.form-search {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
+  gap: 24px;
 }
-.gallery-image {
-  display: block;
-  width: 360px;
-  height: 200px;
+.search-input {
+  border: 1px solid #000;
+  border-radius: 8px;
+  padding: 8px;
+  font-size: 16px;
 }
-.card-description {
-  border-bottom: 1px solid #808080;
-  border-left: 1px solid #808080;
-  border-right: 1px solid #808080;
-  width: 360px;
-  height: 48px;
+.card {
+  max-width: 360px;
+  min-width: 290px;
+  width: 100%;
+  border: 1px solid #000;
+  border-radius: 4px;
+}
+
+.card-img {
+  width: 100%;
+  aspect-ratio: 360 / 200;
+  object-fit: cover;
+  object-position: center;
+}
+.card-title {
   display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  gap: 8px;
+  gap: 2px;
+  justify-content: space-around;
+  align-items: center;
+  padding: 4px 4px;
+  width: 100%;
 }
-.description {
-  font-family: "Montserrat", sans-serif;
+.card-title-text {
   font-weight: 600;
   font-size: 12px;
   line-height: 1.33333;
   letter-spacing: 0.04em;
   color: #2e2f42;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  text-align: center;
 }
-.accent {
-  font-family: "Montserrat", sans-serif;
+.card-text-value {
   font-weight: 400;
   font-size: 12px;
   line-height: 2;
   letter-spacing: 0.04em;
-  color: #2e2f42;
-}
-.loader {
-  visibility: hidden;
-  margin-left: auto;
-  margin-right: auto;
-  width: 48px;
-  height: 48px;
-  border: 5px solid;
-  border-color: #FF3D00 transparent;
-  border-radius: 50%;
-  display: inline-block;
-  box-sizing: border-box;
-  animation: rotation 1s linear infinite;
+  text-align: center;
 }
 
-@keyframes rotation {
+.loader {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  position: relative;
+  animation: rotate 1s linear infinite;
+  display: block;
+  margin: 150px auto;
+}
+.loader::before,
+.loader::after {
+  content: '';
+  box-sizing: border-box;
+  position: absolute;
+  border-radius: 50%;
+  inset: 0px;
+  border: 5px solid green;
+  animation: prixClipFix 2s linear infinite;
+}
+.loader::after {
+  border-color: #ff3d00;
+  animation: prixClipFix 2s linear infinite, rotate 0.5s linear infinite reverse;
+  inset: 6px;
+}
+
+@keyframes rotate {
   0% {
     transform: rotate(0deg);
   }
-
   100% {
     transform: rotate(360deg);
   }
 }
 
-.visible {
-  visibility: visible;
+@keyframes prixClipFix {
+  0% {
+    clip-path: polygon(50% 50%, 0 0, 0 0, 0 0, 0 0, 0 0);
+  }
+  25% {
+    clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 0, 100% 0, 100% 0);
+  }
+  50% {
+    clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 100% 100%, 100% 100%);
+  }
+  75% {
+    clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 0 100%, 0 100%);
+  }
+  100% {
+    clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 0 100%, 0 0);
+  }
 }
