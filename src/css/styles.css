@@ -31,7 +31,7 @@ button:hover {
   justify-content: center;
 }
 
-.form-search {
+.form {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
