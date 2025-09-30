@@ -1,4 +1,4 @@
-import { handlerError } from './render-function';
+import { handlerError } from './render-functions';
 
 const searchSettings = {
   key: '44443472-3b41bcc651e7d0b56b1888f38',
