@@ -1,39 +1,37 @@
-import { renderCard, refs, handlerError } from './js/render-functions';
-import { fetchImage, generateSearchString } from './js/pixabay-api';
 
-import SimpleLightbox from 'simplelightbox';
-import 'simplelightbox/dist/simple-lightbox.min.css';
 
-refs.searchForm.addEventListener('submit', handlerSearchButton);
 
-function handlerSearchButton(event) {
-  event.preventDefault();
-  const searchText = event.target.searchtext.value;
-  if (!searchText) {
-    handlerError('outdata');
-    return;
-  }
-  refs.gallery.innerHTML = '';
-  refs.loader.classList.add('loader');
-  fetchImage(generateSearchString(searchText))
-    .then(image => {
-      refs.loader.classList.remove('loader');
-      if (image.totalHits === 0) {
-        handlerError('nodata');
-        return;
-      }
-      refs.gallery.insertAdjacentHTML('beforeend', renderCard(image.hits));
-      galleryBigImage.refresh();
-    })
-    .catch(error => {
-      refs.loader.classList.remove('loader');
-      handlerError(error);
-    })
-    .finally(refs.searchForm.reset());
+import { getPictures } from './js/pixabay-api.js';
+import { createMarkup, onFetchError } from './js/render-functions';
+
+const formSearch = document.querySelector('.form-search');
+const cardContainer = document.querySelector('.card-container');
+const loader = document.querySelector('.loader');
+
+formSearch.addEventListener('submit', handlerSearch);
+
+function handlerSearch(event) {
+    event.preventDefault();
+
+    const form = event.currentTarget;
+    const userValue = form.elements.search.value.toLowerCase();
+
+    showLoader();
+
+    getPictures(userValue)
+        .then((data) => createMarkup(data, cardContainer))
+        .catch(onFetchError)
+        .finally(() => {
+            form.reset();
+            hideLoader();
+        });
 }
-const galleryBigImage = new SimpleLightbox('.gallery a', {
-  captionDelay: 250,
-  overlayOpacity: 0.8,
-  scrollZoom: false,
-});
-galleryBigImage.on('show.simplelightbox', function () {});
+
+function showLoader() {
+    loader.style.display = 'flex';
+}
+
+function hideLoader() {
+    
+    loader.style.display = 'none';
+}

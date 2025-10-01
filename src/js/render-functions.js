@@ -1,78 +1,65 @@
-import iziToast from 'izitoast';
-import 'izitoast/dist/css/iziToast.min.css';
 
-iziToast.settings({
-  timeout: 2500,
-  resetOnHover: true,
-  transitionIn: 'flipInX',
-  transitionOut: 'flipOutX',
-  position: 'topRight',
-  titleSize: 25,
-  messageSize: 25,
-  backgroundColor: 'rgba(255, 182, 66, 0.8)',
-});
+// Описаний у документації
+import iziToast from "izitoast";
+// Додатковий імпорт стилів
+import "izitoast/dist/css/iziToast.min.css";
 
-export const refs = {
-  searchForm: document.querySelector('.js-search-form'),
-  gallery: document.querySelector('.gallery'),
-  loader: document.querySelector('.js-loader'),
-};
+// Описаний у документації
+import SimpleLightbox from "simplelightbox";
+// Додатковий імпорт стилів
+import "simplelightbox/dist/simple-lightbox.min.css";
 
-export function renderCard(imageData) {
-  return imageData
-    .map(
-      el =>
-        `<li class="card">
-            <a href="${el.largeImageURL}" class="big gallery-link">
-              <img
-                src="${el.previewURL}"
-                alt="${el.tags}"
-                title="${el.tags}"
-                class="card-img"
-            /></a>
-            <ul class="card-title">
-              <li class="card-text-blok">
-                <h2 class="card-title-text">Likes</h2>
-                <p class="card-text-value">${el.likes}</p>
-              </li>
-              <li class="card-text-blok">
-                <h2 class="card-title-text">Views</h2>
-                <p class="card-text-value">${el.views}</p>
-              </li>
-              <li class="card-text-blok">
-                <h2 class="card-title-text">Comments</h2>
-                <p class="card-text-value">${el.comments}</p>
-              </li>
-              <li class="card-text-blok">
-                <h2 class="card-title-text">Downloads</h2>
-                <p class="card-text-value">${el.downloads}</p>
-              </li>
-            </ul>
-          </li>`
-    )
-    .join('');
+
+
+
+export function createMarkup({ hits }, cardContainer) {
+    if (hits.length === 0) {
+        onFetchError();
+        return;
+    }
+
+    const markup = hits.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => {
+        return `
+            <li class="item">
+                <a href="${largeImageURL}">
+                    <img class="image" src="${webformatURL}" alt="${tags}" width="360">
+                </a>
+                <ul class="descr-list">
+                    <li class="descr-item">
+                        <h3 class="descr-title">Likes</h3>
+                        <p class="descr-value">${likes}</p>
+                    </li>
+                    <li class="descr-item">
+                        <h3 class="descr-title">Views</h3>
+                        <p class="descr-value">${views}</p>
+                    </li>
+                    <li class="descr-item">
+                        <h3 class="descr-title">Comments</h3>
+                        <p class="descr-value">${comments}</p>
+                    </li>
+                    <li class="descr-item">
+                        <h3 class="descr-title">Downloads</h3>
+                        <p class="descr-value">${downloads}</p>
+                    </li>
+                </ul>
+            </li>
+        `;
+    }).join('');
+
+    cardContainer.innerHTML = markup;
+
+    const lightbox = new SimpleLightbox('.card-container a', {
+        captions: true,
+        captionsData: 'alt',
+        captionPosition: 'bottom',
+        captionDelay: 250,
+    });
+
+    lightbox.refresh();
 }
 
-export function handlerError(error) {
-  switch (error) {
-    case 'outdata':
-      iziToast.warning({
-        title: 'Error',
-        message: 'Введіть данні для пошуку!',
-      });
-      break;
-    case 'nodata':
-      iziToast.warning({
-        title: 'Error',
-        message:
-          'Sorry, there are no images matching your search query. Please try again!',
-      });
-      break;
-    default:
-      iziToast.error({
-        title: 'Error',
-        message: 'Щось пішло не так. Ми працюемо над вирішенням питання!',
-      });
-      break;
-  }
+export function onFetchError() {
+    iziToast.error({
+        message: 'Sorry, there are no images matching your search query. Please try again!',
+    });
 }
