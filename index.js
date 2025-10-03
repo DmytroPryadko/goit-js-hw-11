@@ -1,29 +1,22 @@
-import{S as p,i as a}from"./assets/vendor-B2mb6eXk.js";(function(){const i=document.createElement("link").relList;if(i&&i.supports&&i.supports("modulepreload"))return;for(const e of document.querySelectorAll('link[rel="modulepreload"]'))r(e);new MutationObserver(e=>{for(const t of e)if(t.type==="childList")for(const n of t.addedNodes)n.tagName==="LINK"&&n.rel==="modulepreload"&&r(n)}).observe(document,{childList:!0,subtree:!0});function s(e){const t={};return e.integrity&&(t.integrity=e.integrity),e.referrerPolicy&&(t.referrerPolicy=e.referrerPolicy),e.crossOrigin==="use-credentials"?t.credentials="include":e.crossOrigin==="anonymous"?t.credentials="omit":t.credentials="same-origin",t}function r(e){if(e.ep)return;e.ep=!0;const t=s(e);fetch(e.href,t)}})();function m(o,i){return fetch(`https://pixabay.com/api/?key=${o}&q=${i}&image_type=photo&orientation=horisontal&safesearch=true`)}function u(o){return o.map(({webformatURL:i,largeImageURL:s,tags:r,likes:e,views:t,comments:n,downloads:c})=>`<li class="list-item">
-  <a class="list-item-link" href="${s}">
-    <img
-      class="list-item-image"
-      src="${i}"
-      alt="${r}"
-    />
-  </a>
-  <ul class="wrap-in-list-item">
-            <li item-in-wrap>
-              <h3 class="item-in-wrap-title">Likes</h3>
-              <p class="item-in-wrap-text">${e}</p>
+import{S as p,i as a}from"./assets/vendor-B2mb6eXk.js";(function(){const o=document.createElement("link").relList;if(o&&o.supports&&o.supports("modulepreload"))return;for(const e of document.querySelectorAll('link[rel="modulepreload"]'))t(e);new MutationObserver(e=>{for(const s of e)if(s.type==="childList")for(const l of s.addedNodes)l.tagName==="LINK"&&l.rel==="modulepreload"&&t(l)}).observe(document,{childList:!0,subtree:!0});function i(e){const s={};return e.integrity&&(s.integrity=e.integrity),e.referrerPolicy&&(s.referrerPolicy=e.referrerPolicy),e.crossOrigin==="use-credentials"?s.credentials="include":e.crossOrigin==="anonymous"?s.credentials="omit":s.credentials="same-origin",s}function t(e){if(e.ep)return;e.ep=!0;const s=i(e);fetch(e.href,s)}})();function m(r,o){return fetch(`https://pixabay.com/api/?key=${r}&q=${o}&image_type=photo&orientation=horizontal&safesearch=true`)}function f(r){return r.map(({webformatURL:o,largeImageURL:i,tags:t,likes:e,views:s,comments:l,downloads:u})=>`<li class="item">
+          <a href="${i}"><img class="image" src="${o}" alt="${t}" /></a>
+          <ul class="item-list">
+            <li class="item-list-item">
+              <h3 class="title">Likes</h3>
+              <p class="value">${e}</p>
             </li>
-            <li item-in-wrap>
-              <h3 class="item-in-wrap-title">Views</h3>
-              <p class="item-in-wrap-text">${t}</p>
+            <li class="item-list-item">
+              <h3 class="title">Views</h3>
+              <p class="value">${s}</p>
             </li>
-            <li item-in-wrap>
-              <h3 class="item-in-wrap-title">Comments</h3>
-              <p class="item-in-wrap-text">${n}</p>
+            <li class="item-list-item">
+              <h3 class="title">Comments</h3>
+              <p class="value">${l}</p>
             </li>
-            <li item-in-wrap>
-              <h3 class="item-in-wrap-title">Downloads</h3>
-              <p class="item-in-wrap-text">${c}</p>
+            <li class="item-list-item">
+              <h3 class="title">Downloads</h3>
+              <p class="value">${u}</p>
             </li>
           </ul>
-  
-</li>`).join("")}const f="44769616-4ffe0cee5617f53d3e1075857",l={form:document.querySelector(".search-form"),list:document.querySelector(".list"),input:document.querySelector(".search-input")};l.form.addEventListener("submit",h);function h(o){o.preventDefault(),l.list.innerHTML="";const i=o.target.elements.input.value.trim();if(i!==""){l.form.insertAdjacentHTML("afterend",' <span class="loader"></span>');const s=document.querySelector(".loader");m(f,i).then(r=>{if(!r.ok)throw new Error(r.status);return r.json()}).then(r=>{const e=r.hits;e.length!==0?(l.list.insertAdjacentHTML("beforeend",u(e)),new p(".list a",{captions:!0,captionType:"attr",captionsData:"alt",captionPosition:"bottom",captionDelay:250}).refresh()):a.show({backgroundColor:"#ef4040",close:!1,closeOnClick:!0,progressBarColor:"white",title:"Error",titleColor:"white",iconUrl:error,position:"topRight",icon:"icon-error.svg",messageColor:"white",messageSize:"16px",message:'"Sorry, there are no images matching your search query. Please try again!"'})}).catch(r=>console.error("Fetch Error:",r)).finally(()=>s.style.display="none"),l.form.reset()}else a.show({backgroundColor:"#ef4040",close:!1,closeOnClick:!0,progressBarColor:"white",title:"Error",titleColor:"white",iconUrl:error,position:"topRight",icon:"icon-error.svg",messageColor:"white",messageSize:"16px",message:"Form field must be filled in"})}
+        </li>`).join("")}const h="44447356-a60fa6f4c2d7f10e895940a18",n=document.querySelector(".form"),c=document.querySelector(".list");n.addEventListener("submit",d);function d(r){c.innerHTML="";const o=r.target.elements.input.value.trim();if(r.preventDefault(),o!=0){n.insertAdjacentHTML("afterend",'<span class="loader"></span>');const i=document.querySelector(".loader");m(h,o).then(t=>{if(!t.ok)throw new Error(t.status);return t.json()}).then(t=>{const e=t.hits;e.length!==0?(c.insertAdjacentHTML("beforeend",f(e)),new p(".list a",{captions:!0,captionType:"attr",captionsData:"alt",captionPosition:"bottom",captionDelay:250}).refresh()):a.show({class:"toast",position:"topRight",icon:"icon",iconUrl:err,iconColor:"white",messageColor:"white",message:"Sorry, there are no images matching your search query. Please try again!"})}).catch(t=>{a.show({class:"toast",position:"topRight",icon:"icon",iconUrl:err,iconColor:"white",messageColor:"white",title:"Error",titleColor:"white",message:"Please try again!"}),t.response?console.error("Server error:",t.response.status):t.request?console.error("No response from server"):console.error("Unknown error:",t.message)}).finally(()=>i.style.display="none"),n.reset()}}
 //# sourceMappingURL=index.js.map
