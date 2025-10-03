@@ -1,97 +1,76 @@
-import { httpRequest } from "./js/pixabay-api";
-import iziToast from "izitoast";
-import "izitoast/dist/css/iziToast.min.css";
-// import  error  from "./img/error.svg";
-import { createMurkup } from "./js/render-functions";
-import SimpleLightbox from "simplelightbox";
-import "simplelightbox/dist/simple-lightbox.min.css";
+import iziToast from 'izitoast';
+import 'izitoast/dist/css/iziToast.min.css';
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
+// import err from './img/err.png';
+import httpRequest from './js/pixabay-api.js';
+import createMarkup from './js/render-functions.js';
 
+const key = '44447356-a60fa6f4c2d7f10e895940a18';
+const form = document.querySelector('.form');
+const list = document.querySelector('.list');
 
-const key = '44769616-4ffe0cee5617f53d3e1075857';
+form.addEventListener('submit', searchHandler);
 
-
-
-const elements = {
-    form: document.querySelector('.search-form'),
-    list: document.querySelector('.list'),
-    input: document.querySelector('.search-input'),
-}
-
-
-elements.form.addEventListener('submit', searchQuery);
-
-
-function searchQuery(evt) {
-
-    evt.preventDefault();
-
-    elements.list.innerHTML = '';
-    
-    const searchText = evt.target.elements.input.value.trim();
-    
-    if (searchText !== "") {
-
-        elements.form.insertAdjacentHTML("afterend", ' <span class="loader"></span>');
-        const loader = document.querySelector('.loader')
-
-        httpRequest(key, searchText)
-    .then(res => {
-        if (!res.ok) {
-          throw new Error(res.status);
+function searchHandler(evt) {
+  list.innerHTML = '';
+  const text = evt.target.elements.input.value.trim();
+  evt.preventDefault();
+  if (text != 0) {
+    form.insertAdjacentHTML('afterend', '<span class="loader"></span>');
+    const loader = document.querySelector('.loader');
+    httpRequest(key, text)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(response.status);
         }
-        return res.json();
-          })
-    .then((data) => {
-        const image = data.hits;
-         if (image.length !== 0) {
-                 
-    elements.list.insertAdjacentHTML("beforeend", createMurkup(image));
-     let lightbox = new SimpleLightbox('.list a', {
-	captions: true,
-	captionType: 'attr',
-	captionsData: 'alt',
-	captionPosition: 'bottom',
-	captionDelay: 250
-     }); 
-     lightbox.refresh();
-    } else {
-            iziToast.show({
-            backgroundColor: '#ef4040',
-            close: false,
-            closeOnClick: true,
-            progressBarColor: 'white',
-            title: 'Error',
-            titleColor: 'white',
-            iconUrl: error,
+        return response.json();
+      })
+      .then(data => {
+        const photos = data.hits;
+        if (photos.length !== 0) {
+          list.insertAdjacentHTML('beforeend', createMarkup(photos));
+          const lightbox = new SimpleLightbox('.list a', {
+            captions: true,
+            captionType: 'attr',
+            captionsData: 'alt',
+            captionPosition: 'bottom',
+            captionDelay: 250,
+          });
+          lightbox.refresh();
+        } else {
+          iziToast.show({
+            class: 'toast',
             position: 'topRight',
-            icon: 'icon-error.svg',
+            icon: 'icon',
+            iconUrl: err,
+            iconColor: 'white',
             messageColor: 'white',
-            messageSize: '16px',
-            message: '"Sorry, there are no images matching your search query. Please try again!"'
-        }); 
-             }
-         })
-            .catch((err) => console.error("Fetch Error:", err))
-           .finally(() => (loader.style.display = 'none'));
-    elements.form.reset();
-        
-    } else {
+            message: `Sorry, there are no images matching your search query. Please try again!`,
+          });
+        }
+      })
+      .catch(error => {
         iziToast.show({
-            backgroundColor: '#ef4040',
-            close: false,
-            closeOnClick: true,
-            progressBarColor: 'white',
-            title: 'Error',
-            titleColor: 'white',
-            iconUrl: error,
-            position: 'topRight',
-            icon: 'icon-error.svg',
-            messageColor: 'white',
-            messageSize: '16px',
-            message: 'Form field must be filled in'
+          class: 'toast',
+          position: 'topRight',
+          icon: 'icon',
+          iconUrl: err,
+          iconColor: 'white',
+          messageColor: 'white',
+          title: 'Error',
+          titleColor: 'white',
+          message: `Please try again!`,
         });
-      
-    }   
-    
-  
+        if (error.response) {
+          console.error('Server error:', error.response.status);
+        } else if (error.request) {
+          console.error('No response from server');
+        } else {
+          console.error('Unknown error:', error.message);
+        }
+      })
+      .finally(() => (loader.style.display = 'none'));
+    form.reset();
+  }
 }
