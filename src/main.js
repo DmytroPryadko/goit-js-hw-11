@@ -10,7 +10,7 @@ const gallery = document.querySelector(".gallery");
 
 const lightbox = new SimpleLightbox('.gallery a', { captionsData: 'alt', captionDelay: 250 });
 
-const searchForm = document.querySelector(".search-form")
+const searchForm = document.querySelector(".form")
 
 searchForm.addEventListener("submit", handlerSubmit);
 function handlerSubmit(event) {
