@@ -4,21 +4,22 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/goit-js-hw-11/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pixabay Search</title>
+    <title>Image search app</title>
     <script type="module" crossorigin src="/goit-js-hw-11/index.js"></script>
     <link rel="modulepreload" crossorigin href="/goit-js-hw-11/assets/vendor-B2mb6eXk.js">
     <link rel="stylesheet" crossorigin href="/goit-js-hw-11/assets/vendor-Dr4k8ETB.css">
-    <link rel="stylesheet" crossorigin href="/goit-js-hw-11/assets/index-BYHJMB5i.css">
+    <link rel="stylesheet" crossorigin href="/goit-js-hw-11/assets/index-SryRxd-2.css">
   </head>
   <body>
-    <div class="container">
-      <form class="form">
-        <input class="input" type="text" name="input" />
-        <button class="button" type="submit">Search</button>
-      </form>
-      <span class="loader"></span>
-      <ul class="gallery"></ul>
-    </div>
+    <form class="search-form">
+      <div class="form-group">
+        <input type="text" class="form-control" name="query" />
+      </div>
+
+      <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+    <span id="loading" class="loader" style="display: none"></span>
+    <ul class="gallery"></ul>
 
   </body>
 </html>
