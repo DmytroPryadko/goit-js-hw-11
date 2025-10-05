@@ -1,76 +1,46 @@
-import iziToast from 'izitoast';
-import 'izitoast/dist/css/iziToast.min.css';
-import SimpleLightbox from 'simplelightbox';
-import 'simplelightbox/dist/simple-lightbox.min.css';
-// import err from './img/err.png';
-import httpRequest from './js/pixabay-api.js';
-import createMarkup from './js/render-functions.js';
 
-const key = '44447356-a60fa6f4c2d7f10e895940a18';
-const form = document.querySelector('.form');
-const list = document.querySelector('.list');
+import { fetchImages } from './js/pixabay-api.js';
+import { renderGallery, showError, showInfo } from './js/render-functions.js';
+import SimpleLightbox from "simplelightbox";
+import "simplelightbox/dist/simple-lightbox.min.css";
 
-form.addEventListener('submit', searchHandler);
 
-function searchHandler(evt) {
-  list.innerHTML = '';
-  const text = evt.target.elements.input.value.trim();
-  evt.preventDefault();
-  if (text != 0) {
-    form.insertAdjacentHTML('afterend', '<span class="loader"></span>');
-    const loader = document.querySelector('.loader');
-    httpRequest(key, text)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(response.status);
-        }
-        return response.json();
-      })
-      .then(data => {
-        const photos = data.hits;
-        if (photos.length !== 0) {
-          list.insertAdjacentHTML('beforeend', createMarkup(photos));
-          const lightbox = new SimpleLightbox('.list a', {
-            captions: true,
-            captionType: 'attr',
-            captionsData: 'alt',
-            captionPosition: 'bottom',
-            captionDelay: 250,
-          });
-          lightbox.refresh();
-        } else {
-          iziToast.show({
-            class: 'toast',
-            position: 'topRight',
-            icon: 'icon',
-            iconUrl: err,
-            iconColor: 'white',
-            messageColor: 'white',
-            message: `Sorry, there are no images matching your search query. Please try again!`,
-          });
-        }
-      })
-      .catch(error => {
-        iziToast.show({
-          class: 'toast',
-          position: 'topRight',
-          icon: 'icon',
-          iconUrl: err,
-          iconColor: 'white',
-          messageColor: 'white',
-          title: 'Error',
-          titleColor: 'white',
-          message: `Please try again!`,
+const loadingIndicator = document.getElementById('loading');
+const gallery = document.querySelector(".gallery");
+
+const lightbox = new SimpleLightbox('.gallery a', { captionsData: 'alt', captionDelay: 250 });
+
+const searchForm = document.querySelector(".search-form")
+
+searchForm.addEventListener("submit", handlerSubmit);
+function handlerSubmit(event) {
+    event.preventDefault();
+
+    const form = event.currentTarget;
+    const queryValue = form.elements.query.value;
+    if (!queryValue) {
+        showError("Please enter something!");
+        return;
+    }
+
+    gallery.innerHTML = '';
+    loadingIndicator.style.display = 'block';
+
+    fetchImages(queryValue)
+        .then(data => {
+            if (data.hits.length === 0) {
+                showInfo('Sorry, there are no images matching your search query. Please try again!');
+            } else {
+                renderGallery(data.hits);
+                lightbox.refresh();
+            }
+        })
+        .catch(error => {
+            console.log(error);
+            showError('An error occurred while fetching images. Please try again later.')
+        })
+        .finally(() => {
+            loadingIndicator.style.display = 'none';
+            form.reset()
         });
-        if (error.response) {
-          console.error('Server error:', error.response.status);
-        } else if (error.request) {
-          console.error('No response from server');
-        } else {
-          console.error('Unknown error:', error.message);
-        }
-      })
-      .finally(() => (loader.style.display = 'none'));
-    form.reset();
-  }
-}
+} 
