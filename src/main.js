@@ -1,46 +1,57 @@
-
 import { fetchImages } from './js/pixabay-api.js';
-import { renderGallery, showError, showInfo } from './js/render-functions.js';
-import SimpleLightbox from "simplelightbox";
-import "simplelightbox/dist/simple-lightbox.min.css";
+import {
+  renderGallery,
+  clearGallery,
+  showLoader,
+  hideLoader,
+  showError,
+  showInfo,
+} from './js/render-functions.js';
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 
+// Елементи DOM
+const searchForm = document.querySelector('.form');
+const gallery = document.querySelector('.gallery');
+const loader = document.querySelector('.loader');
 
-const loadingIndicator = document.getElementById('loading');
-const gallery = document.querySelector(".gallery");
+// Ініціалізація Lightbox
+let lightbox = new SimpleLightbox('.gallery a', {
+  captionsData: 'alt',
+  captionDelay: 250,
+});
 
-const lightbox = new SimpleLightbox('.gallery a', { captionsData: 'alt', captionDelay: 250 });
+searchForm.addEventListener('submit', handleSubmit);
 
-const searchForm = document.querySelector(".form")
+function handleSubmit(event) {
+  event.preventDefault();
 
-searchForm.addEventListener("submit", handlerSubmit);
-function handlerSubmit(event) {
-    event.preventDefault();
+  const form = event.currentTarget;
+  const queryValue = form.elements.input.value.trim();
 
-    const form = event.currentTarget;
-    const queryValue = form.elements.query.value;
-    if (!queryValue) {
-        showError("Please enter something!");
-        return;
-    }
+  if (!queryValue) {
+    showError('Please enter something!');
+    return;
+  }
 
-    gallery.innerHTML = '';
-    loadingIndicator.style.display = 'block';
+  clearGallery(gallery);
+  showLoader(loader);
 
-    fetchImages(queryValue)
-        .then(data => {
-            if (data.hits.length === 0) {
-                showInfo('Sorry, there are no images matching your search query. Please try again!');
-            } else {
-                renderGallery(data.hits);
-                lightbox.refresh();
-            }
-        })
-        .catch(error => {
-            console.log(error);
-            showError('An error occurred while fetching images. Please try again later.')
-        })
-        .finally(() => {
-            loadingIndicator.style.display = 'none';
-            form.reset()
-        });
-} 
+  fetchImages(queryValue)
+    .then(data => {
+      if (data.hits.length === 0) {
+        showInfo('Sorry, there are no images matching your search query. Please try again!');
+      } else {
+        renderGallery(gallery, data.hits);
+        lightbox.refresh();
+      }
+    })
+    .catch(error => {
+      console.error(error);
+      showError('An error occurred while fetching images. Please try again later.');
+    })
+    .finally(() => {
+      hideLoader(loader);
+      form.reset();
+    });
+}
